@@ -58,6 +58,13 @@ module.exports = options => through2.obj({
 
     callback(null, file);
   }).catch(error => {
-    callback(new gutil.PluginError('gulp-image', error));
+    gutil.log(
+      chalk.red('✖ ') + file.relative + chalk.gray(' ->') +
+      chalk.gray(' Error while optimizing ')
+    );
+    if (options ? options.ignoreErrors : false)
+      callback(null, file)
+    else
+      callback(new gutil.PluginError('gulp-image', error, {fileName: file.path}));
   });
 });
